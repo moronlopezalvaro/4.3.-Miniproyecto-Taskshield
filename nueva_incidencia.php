@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/includes/conexion.php';
+require_once __DIR__ . '/conexion.php';
 
 $error = '';
 
