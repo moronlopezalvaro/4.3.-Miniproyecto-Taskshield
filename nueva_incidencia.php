@@ -4,16 +4,15 @@ require_once __DIR__ . '/conexion.php';
 
 $error = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $titulo      = filter_input(INPUT_POST, 'titulo', FILTER_SANITIZE_SPECIAL_CHARS);
-    $descripcion = filter_input(INPUT_POST, 'descripcion', FILTER_SANITIZE_SPECIAL_CHARS);
-    $prioridad   = filter_input(INPUT_POST, 'prioridad', FILTER_SANITIZE_SPECIAL_CHARS);
-    $email       = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+// Si no se ha enviado el formulario, filter_input() devuelve null
+$titulo      = filter_input(INPUT_POST, 'titulo', FILTER_SANITIZE_SPECIAL_CHARS);
+$descripcion = filter_input(INPUT_POST, 'descripcion', FILTER_SANITIZE_SPECIAL_CHARS);
+$prioridad   = filter_input(INPUT_POST, 'prioridad', FILTER_SANITIZE_SPECIAL_CHARS);
+$email       = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 
+if ($titulo !== null) {
     if (!$titulo || !$descripcion) {
         $error = 'El título y la descripción son obligatorios.';
-    } elseif (!in_array($prioridad, ['Baja', 'Media', 'Alta'])) {
-        $error = 'La prioridad no es válida.';
     } elseif (!$email) {
         $error = 'El email del cliente no es válido.';
     } else {

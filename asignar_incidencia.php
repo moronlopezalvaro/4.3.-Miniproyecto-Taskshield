@@ -13,9 +13,10 @@ if (!$id) {
     $error = 'El id de la incidencia no es válido.';
 } else {
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $tecnicoId = filter_input(INPUT_POST, 'tecnico_id', FILTER_VALIDATE_INT);
+    // Si no se ha enviado el formulario, filter_input() devuelve null
+    $tecnicoId = filter_input(INPUT_POST, 'tecnico_id', FILTER_VALIDATE_INT);
 
+    if ($tecnicoId !== null) {
         if (!$tecnicoId) {
             $error = 'El id del técnico no es válido.';
         } else {

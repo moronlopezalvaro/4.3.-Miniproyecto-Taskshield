@@ -7,6 +7,8 @@ $error = '';
 $incidencia = false;
 
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+// Si no se ha enviado el formulario, filter_input() devuelve null
+$estado = filter_input(INPUT_POST, 'estado', FILTER_SANITIZE_SPECIAL_CHARS);
 
 if (!$id) {
     $error = 'El id de la incidencia no es válido.';
@@ -18,21 +20,15 @@ if (!$id) {
 
         if (!$incidencia) {
             $error = 'No existe ninguna incidencia con el id ' . $id . '.';
-        } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $estado = filter_input(INPUT_POST, 'estado', FILTER_SANITIZE_SPECIAL_CHARS);
+        } elseif ($estado !== null) {
+            $stmt = $pdo->prepare('UPDATE incidencias SET estado = :estado WHERE id = :id');
+            $stmt->execute([':estado' => $estado, ':id' => $id]);
 
-            if (!in_array($estado, ['Pendiente', 'En Proceso', 'Resuelta'])) {
-                $error = 'El estado no es válido.';
+            if ($stmt->rowCount() > 0) {
+                $mensaje = 'Estado actualizado correctamente.';
+                $incidencia['estado'] = $estado;
             } else {
-                $stmt = $pdo->prepare('UPDATE incidencias SET estado = :estado WHERE id = :id');
-                $stmt->execute([':estado' => $estado, ':id' => $id]);
-
-                if ($stmt->rowCount() > 0) {
-                    $mensaje = 'Estado actualizado correctamente.';
-                    $incidencia['estado'] = $estado;
-                } else {
-                    $mensaje = 'No se ha cambiado nada (el estado ya era ese).';
-                }
+                $mensaje = 'No se ha cambiado nada (el estado ya era ese).';
             }
         }
     } catch (PDOException $e) {

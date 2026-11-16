@@ -7,10 +7,12 @@ $error = '';
 $borrada = false;
 
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+// Solo llega 'confirmar' cuando se pulsa el botón "Sí, eliminar"
+$confirmar = filter_input(INPUT_POST, 'confirmar', FILTER_SANITIZE_SPECIAL_CHARS);
 
 if (!$id) {
     $error = 'El id de la incidencia no es válido.';
-} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+} elseif ($confirmar !== null) {
     try {
         $stmt = $pdo->prepare('DELETE FROM incidencias WHERE id = :id');
         $stmt->execute([':id' => $id]);
@@ -50,7 +52,7 @@ if (!$id) {
     <?php if ($id && !$borrada && !$error) { ?>
         <p>¿Seguro que quieres eliminar la incidencia <?php echo $id; ?>? No se puede deshacer.</p>
         <form method="post" action="eliminar_incidencia.php?id=<?php echo $id; ?>">
-            <button type="submit">Sí, eliminar</button>
+            <button type="submit" name="confirmar" value="si">Sí, eliminar</button>
         </form>
     <?php } ?>
 
