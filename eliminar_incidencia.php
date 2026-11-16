@@ -1,7 +1,32 @@
 <?php
 
-?>
+require_once __DIR__ . '/conexion.php';
 
+$mensaje = '';
+$error = '';
+$borrada = false;
+
+$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
+if (!$id) {
+    $error = 'El id de la incidencia no es válido.';
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+        $stmt = $pdo->prepare('DELETE FROM incidencias WHERE id = :id');
+        $stmt->execute([':id' => $id]);
+
+        if ($stmt->rowCount() > 0) {
+            $mensaje = 'La incidencia ' . $id . ' se ha eliminado correctamente.';
+            $borrada = true;
+        } else {
+            $error = 'No existe ninguna incidencia con el id ' . $id . '.';
+        }
+    } catch (PDOException $e) {
+        error_log('Error DELETE incidencias: ' . $e->getMessage());
+        $error = 'No se ha podido eliminar la incidencia.';
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -13,15 +38,20 @@
 <body style="font-family: Arial, sans-serif; margin: 30px;">
     <h1>Eliminar incidencia</h1>
 
-    <p style="color:green"></p>
+    <?php if ($mensaje) { ?>
+        <p style="color:green"><?php echo $mensaje; ?></p>
+    <?php } ?>
 
-    <p style="color:red"></p>
+    <?php if ($error) { ?>
+        <p style="color:red"><?php echo $error; ?></p>
+    <?php } ?>
 
-
-    <p>¿Seguro que quieres eliminar la incidencia No se puede deshacer.</p>
-    <form method="post" action="eliminar_incidencia.php?id=">
-        <button type="submit">Sí, eliminar</button>
-    </form>
+    <?php if ($id && !$borrada && !$error) { ?>
+        <p>¿Seguro que quieres eliminar la incidencia <?php echo $id; ?>? No se puede deshacer.</p>
+        <form method="post" action="eliminar_incidencia.php?id=<?php echo $id; ?>">
+            <button type="submit">Sí, eliminar</button>
+        </form>
+    <?php } ?>
 
     <p><a href="index.php">Volver al listado</a></p>
 </body>
