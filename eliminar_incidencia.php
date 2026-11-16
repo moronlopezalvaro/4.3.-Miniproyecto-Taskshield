@@ -33,17 +33,18 @@ if (!$id) {
 <head>
     <meta charset="UTF-8">
     <title>TaskShield - Eliminar incidencia</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body style="font-family: Arial, sans-serif; margin: 30px;">
+<body>
     <h1>Eliminar incidencia</h1>
 
     <?php if ($mensaje) { ?>
-        <p style="color:green"><?php echo $mensaje; ?></p>
+        <p class="ok"><?php echo $mensaje; ?></p>
     <?php } ?>
 
     <?php if ($error) { ?>
-        <p style="color:red"><?php echo $error; ?></p>
+        <p class="error"><?php echo $error; ?></p>
     <?php } ?>
 
     <?php if ($id && !$borrada && !$error) { ?>

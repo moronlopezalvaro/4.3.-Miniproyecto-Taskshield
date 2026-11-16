@@ -24,6 +24,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <title>TaskShield - Incidencias</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -34,7 +35,7 @@ try {
     </p>
 
     <?php if ($error) { ?>
-        <p style="color:red"><?php echo $error; ?></p>
+        <p class="error"><?php echo $error; ?></p>
     <?php } ?>
 
     <?php if (count($incidencias) === 0) { ?>

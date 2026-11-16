@@ -1,6 +1,6 @@
 <?php
 
-// archivo: includes/conexion.php
+// archivo: conexion.php
 require_once __DIR__ . '/config.php';
 
 try {

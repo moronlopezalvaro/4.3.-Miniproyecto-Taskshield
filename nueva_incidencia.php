@@ -43,13 +43,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>TaskShield - Nueva incidencia</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body style="font-family: Arial, sans-serif; margin: 30px;">
+<body>
     <h1>Nueva incidencia</h1>
 
     <?php if ($error) { ?>
-        <p style="color:red"><?php echo $error; ?></p>
+        <p class="error"><?php echo $error; ?></p>
     <?php } ?>
 
     <form method="post" action="nueva_incidencia.php">

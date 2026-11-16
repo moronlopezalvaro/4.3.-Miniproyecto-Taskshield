@@ -46,7 +46,8 @@ if (!$id) {
                 $error = 'Error al asignar. No se ha guardado ningún cambio.';
             } catch (Exception $e) {
                 $pdo->rollBack();
-                $error = $e->getMessage() . ' No se ha guardado ningún cambio.';
+                error_log('Error asignación: ' . $e->getMessage());
+                $error = 'No se ha podido asignar: el técnico o la incidencia no existen. No se ha guardado ningún cambio.';
             }
         }
     }
@@ -75,17 +76,18 @@ if (!$id) {
 <head>
     <meta charset="UTF-8">
     <title>TaskShield - Asignar incidencia</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <h1>Asignar incidencia a un técnico</h1>
 
     <?php if ($mensaje) { ?>
-        <p style="color:green"><?php echo $mensaje; ?></p>
+        <p class="ok"><?php echo $mensaje; ?></p>
     <?php } ?>
 
     <?php if ($error) { ?>
-        <p style="color:red"><?php echo $error; ?></p>
+        <p class="error"><?php echo $error; ?></p>
     <?php } ?>
 
     <?php if ($incidencia) { ?>
